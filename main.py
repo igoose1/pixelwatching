@@ -19,7 +19,7 @@ def get_image(filename):
 
 
 def download_image(url, filename):
-    threading.Timer(60.0, download_image).start()
+    threading.Timer(60.0, download_image, (url, filename)).start()
     global main_image
     with open(filename, 'wb') as file:
         file.write(requests.get(url).content)
@@ -49,9 +49,9 @@ def send_crop_image(message):
     with crop_image(main_image, get_coord(coord)) as img:
         imgbytes = io.BytesIO()
         img.save(imgbytes, format='PNG')
-        bot.send_photo(message.chat.id,
-                       imgbytes.getvalue(),
-                       reply_to_message_id=message.message_id)
+        bot.send_document(message.chat.id,
+                          imgbytes.getvalue(),
+                          reply_to_message_id=message.message_id)
 
 
 def main():
